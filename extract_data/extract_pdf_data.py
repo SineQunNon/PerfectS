@@ -945,7 +945,7 @@ def get_lab(pages):
     return lab_tables
 
 def main():
-    pdf_filepath = '/Users/sinequanon/Desktop/PerfectS/data/pdf_data/TEST_15.pdf'
+    pdf_filepath = '/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_01.pdf'
 
     loader = UnstructuredPDFLoader(pdf_filepath, mode='elements')
     pages = loader.load()
