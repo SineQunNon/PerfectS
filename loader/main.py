@@ -84,17 +84,27 @@ def get_lab(pages):
     
     return lab_tables
 
-def main():
-    pdf_filepath = '/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_04.pdf'
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'pdf_loader')))
+
+# Test
+def main(pdf_filepath):
+    #pdf_filepath = '/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_12.pdf'
     pages = load_pdf(pdf_filepath)
 
+    animal_info = get_animal_data(pages)
     soap_result = get_soap(pages)
     vital_check_table = get_vital_check(pages)
     lab_tables = get_lab(pages)
 
-    print(soap_result)
-    print(vital_check_table)
-    print(lab_tables)
+    #print(soap_result)
+    #print(vital_check_table)
+    #print(lab_tables)
+    return soap_result, vital_check_table, lab_tables, animal_info
 
-if __name__ == "__main__":
-    main()
+def loader_function():
+    return "This is a function from loader_module"
+
+# if __name__ == "__main__":
+#     main()

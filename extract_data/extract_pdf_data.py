@@ -25,11 +25,7 @@ def extract_data_via_points(pages, x, y1, y2):
     
     return ("Not Found")
 
-def get_animal_data(pdf_path):
-    pdf_filepath = pdf_path
-    loader = UnstructuredPDFLoader(pdf_filepath, mode='elements')
-    pages = loader.load()
-
+def get_animal_data(pages):
     info = {}
 
     #동물 정보 추출
@@ -945,21 +941,25 @@ def get_lab(pages):
     return lab_tables
 
 def main():
-    pdf_filepath = '/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_01.pdf'
+    pdf_filepath = '/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_12.pdf'
 
     loader = UnstructuredPDFLoader(pdf_filepath, mode='elements')
     pages = loader.load()
 
-    soap_result = get_soap(pages)
+    animal_info = get_animal_data(pages)
+    
+    #soap_result = get_soap(pages)
         
-    vital_check_table = get_vital_check(pages)
+    #vital_check_table = get_vital_check(pages)
 
-    lab_tables = get_lab(pages)
+    #lab_tables = get_lab(pages)
 
-    print(soap_result)
+    print(animal_info)
 
-    print(vital_check_table)
+    #print(soap_result)
 
-    print(lab_tables)
+    #print(vital_check_table)
+
+    #print(lab_tables)
 
 main()
