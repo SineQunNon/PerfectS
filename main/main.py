@@ -10,6 +10,9 @@ class MyHandler(FileSystemEventHandler):
             # pdf 파일 들어올 시 pptx 생성 플로우 넣어 주기
 
             print(f'파일이 생성되었습니다: {event.src_path}')
+            #src_path에 대해서 코드 실행
+
+            #저장까지 하는 플로우
 
 
 def monitor_folder(path_to_watch):

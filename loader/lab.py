@@ -189,11 +189,15 @@ def make_lab_table(pages):
     lab_df = pd.DataFrame(lab)
     return lab_df
 
-
+from loader.pdf_loader import load_pdf
+from loader.main import *
 #pptx 생성 시 필요한 Lab 정보 DataFrame 추추래서 반환#
 # Input : list(dict(date, tables))
 # output : DataFrame
-def get_pptx_tables(lab_tables):
+def get_pptx_tables(pdf_path):
+    pages = load_pdf(pdf_path)
+
+    lab_tables = get_lab(pages)
     # HCT, WBC, PLT
     extracted_lab_tables = []
 

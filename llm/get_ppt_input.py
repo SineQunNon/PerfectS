@@ -29,3 +29,12 @@ def get_ppt_input(pdf_path):
     answer = chain.invoke(llm_input)
     
     return answer
+
+pdf_path = "/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_15.pdf"
+
+answer = get_ppt_input(pdf_path)
+
+print(answer)
+
+from loader.lab import get_pptx_tables
+
