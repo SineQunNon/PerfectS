@@ -64,7 +64,7 @@ def get_prompt():
     parser = get_parser()
     prompt = prompt.partial(format=parser.get_format_instructions())
 
-    f_prompt = prompt.partial(foramt=parser.get_format_instructions())
+    #f_prompt = prompt.partial(foramt=parser.get_format_instructions())
     #print(f_prompt)
 
     return prompt

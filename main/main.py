@@ -1,6 +1,7 @@
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from llm.get_ppt_input import get_ppt_input
 
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
@@ -9,9 +10,15 @@ class MyHandler(FileSystemEventHandler):
         else:
             # pdf 파일 들어올 시 pptx 생성 플로우 넣어 주기
 
-            print(f'파일이 생성되었습니다: {event.src_path}')
-            #src_path에 대해서 코드 실행
-
+            # 파일의 확장가가 pdf인지 확인
+            if event.src_path.lower().endswith('.pdf'):
+                print(f'PDF 파일이 들어옴: {event.src_path}')
+                pdf_path = event.src_path
+                answer = get_ppt_input(pdf_path)
+                print(answer)
+            else:
+                print(f"PDF 이외의 파일이 들어옴 : {event.src_path}")
+            
             #저장까지 하는 플로우
 
 
