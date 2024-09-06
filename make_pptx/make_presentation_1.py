@@ -11,7 +11,7 @@ from pptx.dml.color import RGBColor
 from pptx.shapes.group import GroupShape
 from pptx.shapes.connector import Connector
 import sys
-#sys.path.append('')
+#sys.path.append('/home/user/PerfectS/extract_data/')
 from extract_data.extract_pdf_data import main
 import tempfile
 import pandas as pd
@@ -281,7 +281,7 @@ def add_new_slide_with_chart_image(prs, image1, image2=None):
         print("Title Only layout not found. Using default layout.")
         # 기본 레이아웃을 사용
         slide_layout = prs.slide_layouts[0]  
- # 새로운 슬라이드를 추가
+# 새로운 슬라이드를 추가
     new_slide = prs.slides.add_slide(slide_layout) 
 # 슬라이드의 제목을 가져옴
     title = new_slide.shapes.title  
@@ -387,6 +387,7 @@ def get_ppt_input(pdf_path):
     info = get_animal_data(pages)
 
     llm_input = get_LLM_input(info, soap)
+    #print(llm_input)
 
     #------------------------get LLM input--------------------------#
     from langchain_openai import ChatOpenAI
@@ -395,17 +396,22 @@ def get_ppt_input(pdf_path):
 
 
     from prompt.prompt import get_prompt, get_parser
-
+    print("1")
     prompt = get_prompt()
+    print("2")
     parser = get_parser()
 
     #------------------------chain--------------------------#
     from langchain_core.runnables import RunnablePassthrough
+    print("3")
 
+    print(prompt)
     chain = {'input' : RunnablePassthrough()} | prompt | llm | parser
 
+    print("4")
+    print(llm_input)
     answer = chain.invoke(llm_input)
-    print(answer)
+    #print(answer)
     return answer
 
 
@@ -438,7 +444,7 @@ def insert_signalment_to_slide_title_and_body(prs, slide_index, signalment_text,
     # 제목 텍스트 상자를 찾고 "signalment"를 삽입합니다.
     title_shape = slide.shapes.title
     if title_shape:
-        title_shape.text = "Signalment"
+        title_shape.text = "signalment"
 
     # 본문(텍스트 상자)을 찾습니다.
     body_shape = None
@@ -458,7 +464,7 @@ def insert_signalment_to_slide_title_and_body(prs, slide_index, signalment_text,
         p.font.name = 'Arial'           # 글꼴 설정
         
         body_shape.left = Inches(1)     # 왼쪽 여백 설정
-        body_shape.top = Inches(2)      # 상단 여백 설정
+        body_shape.top = Inches(1.5)      # 상단 여백 설정
         body_shape.width = Inches(8)    # 너비 설정
         body_shape.height = Inches(4) 
     else:
@@ -499,17 +505,12 @@ def insert_text_to_slide(prs, slide_index, title_text, body_text):
         p.font.size = Pt(13)  # 단락 수준에서 폰트 크기를 재설정
 
         # 마지막 슬라이드(전체 8번째 슬라이드)를 위한 특별한 여백 및 크기 조정
-        if slide_index == 7:  # 슬라이드 인덱스는 0부터 시작하므로 7이 8번째 슬라이드를 의미
-            body_shape.left = Inches(1)     # 왼쪽 여백 설정
-            body_shape.top = Inches(8)      # 상단 여백 설정
-            body_shape.width = Inches(6)    # 너비 설정
-            body_shape.height = Inches(4)   # 높이 설정
-        else:
+       
             # 기본 위치와 크기 조정
-            body_shape.left = Inches(1)     # 왼쪽 여백 설정
-            body_shape.top = Inches(2)      # 상단 여백 설정
-            body_shape.width = Inches(8)    # 너비 설정
-            body_shape.height = Inches(10)  # 높이 설정
+        body_shape.left = Inches(1)     # 왼쪽 여백 설정
+        body_shape.top = Inches(1.5)      # 상단 여백 설정
+        body_shape.width = Inches(8)    # 너비 설정
+        body_shape.height = Inches(4)  # 높이 설정
     else:
         print(f"Slide {slide_index} does not have a content area.")
         
@@ -553,19 +554,49 @@ def get_pptx_tables(pdf_path):
     print(result_df)
     return result_df
 
+def add_textbox_to_slides(prs, text=" fff"):
+    """
+    첫 번째와 마지막 슬라이드를 제외한 모든 슬라이드에 텍스트 박스를 추가하는 함수.
+    """
+    slide_count = len(prs.slides)  # 전체 슬라이드 개수
+
+    # 첫 번째와 마지막 슬라이드를 제외하고 순회
+    for slide_index in range(1, slide_count - 1):
+        slide = prs.slides[slide_index]
+
+        # 텍스트 상자 추가 (위치와 크기는 필요에 따라 조정)
+        left = Inches(1)
+        top = Inches(5)
+        width = Inches(8)
+        height = Inches(1)
+
+        textbox = slide.shapes.add_textbox(left, top, width, height)
+        text_frame = textbox.text_frame
+        text_frame.clear()
+
+        # 텍스트 추가
+        p = text_frame.add_paragraph()
+        p.text = text
+        p.font.size = Pt(13)  # 폰트 크기 설정
+        p.font.bold = True  # 굵게 설정
+
 def main_presentation():
     pdf_path = "/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_01.pdf"
     soap_result, vital_check_data_list, lab_data_list, animaldata = main(pdf_path)
     pptx_file_path = '/Users/sinequanon/Documents/PerfectS/data/pptx/template3.pptx'
     
+    
     if not os.path.exists(pptx_file_path):
         print("PPTX file does not exist.")
         return
 
-    # 
     prs = Presentation(pptx_file_path)
     answer = get_ppt_input(pdf_path)
+    print("받은 데이터===========")
+    print(answer)
     result_df = get_pptx_tables(pdf_path)
+
+    
     # signalment 부분 추출 및 처리
     signalment_str = answer.signalment
 
@@ -582,11 +613,10 @@ def main_presentation():
         f"현재 무게: {extracted_data.get('BW', 'N/A')}\n"
     )
 
-
     # 두 번째 슬라이드에 signalment 삽입
     insert_signalment_to_slide_title_and_body(prs, slide_index=1, signalment_text=signalment_text, append=True)
-# answer 문자열을 파싱하여 key-value 쌍을 얻음
-# MedicalSummary 객체의 속성 추출
+ # answer 문자열을 파싱하여 key-value 쌍을 얻음
+ # MedicalSummary 객체의 속성 추출
     attributes = ['chief_complaint', 'body_check', 'diagnosis', 'plan_edu', 'Sugery', 'a_record', 'postcare']
     
     # 첫 번째 항목은 두 번째 슬라이드에 삽입
@@ -614,7 +644,37 @@ def main_presentation():
     slides = list(xml_slides)
     for i in [3, 2]:  # 뒤에서부터 제거
         xml_slides.remove(slides[i])
-    
+        
+    """======================================================= SOAP PAGES DONE ======================================================="""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # 이미지 추출
     images = extract_images_from_pdf(pdf_path)
     get_ppt_input(pdf_path)
@@ -625,6 +685,18 @@ def main_presentation():
     # Ensure any remaining images are added
     if len(images) % 2 != 0:
         add_new_slide_with_chart_image(prs, images[-1])
+
+
+    """======================================================= CHART PAGES DONE ======================================================="""
+
+
+
+
+
+
+
+
+
 
     # Vital Check 그래프 생성
     graph_path = plot_vital_check_graph(vital_check_data_list)
@@ -664,12 +736,11 @@ def main_presentation():
     add_lab_table_by_date_to_slide(prs, result_df, slide_layout_index)
 
 
-    # "Centered Text" 레이아웃을 사용하여 새로운 슬라이드 추가
     slide_layout = None
     for layout in prs.slide_layouts:
-        if layout.name == 'Centered Text':
-            slide_layout = layout
-            break
+            if layout.name == 'Centered Text':
+                slide_layout = layout
+                break
 
     if not slide_layout:
         print("Centered Text layout not found. Using default layout.")
@@ -677,57 +748,38 @@ def main_presentation():
 
     thank_you_slide = prs.slides.add_slide(slide_layout)
 
-# 슬라이드 크기 가져오기
-    slide_width = prs.slide_width
-    slide_height = prs.slide_height
-
-# 텍스트 상자의 너비와 높이 설정 (필요에 따라 조정 가능)
-    textbox_width = Inches(3)  # 예시로 설정한 너비
-    textbox_height = Inches(1.5)  # 예시로 설정한 높이
-
-# 텍스트 상자의 위치를 슬라이드 중앙으로 설정
-    left = (slide_width - textbox_width) / 2
-    top = (slide_height - textbox_height) / 2
-
+    # 기존 텍스트 상자를 찾기
+    textbox = None
     for shape in thank_you_slide.shapes:
-        if shape.has_text_frame:
-            shape.text_frame.clear()  # 기존 텍스트 지우기
-            p = shape.text_frame.add_paragraph()
-            p.text = "감사합니다"
-            p.font.size = Pt(60)
-            p.font.bold = True
-            
-            # 텍스트 상자의 정렬을 중앙으로 설정
-            p.alignment = PP_ALIGN.CENTER
-
-            # 슬라이드 크기 가져오기 (Presentation 객체에서 가져옴)
-            slide_width = prs.slide_width
-            slide_height = prs.slide_height
-
-            # 텍스트 상자의 크기 설정 (너비와 높이는 필요에 따라 조정 가능)
-            textbox_width = Inches(2)
-            textbox_height = Inches(2)
-
-            # 텍스트 상자의 위치를 슬라이드 중앙으로 설정
-            left = (slide_width - textbox_width) / 2
-            top = (slide_height - textbox_height) / 2
-
-            # 텍스트 상자의 위치와 크기 설정
-            shape.left = left
-            shape.top = top
-            shape.width = textbox_width
-            shape.height = textbox_height
-
-            # 텍스트 프레임 내에서 수직 중앙 정렬 설정
-            shape.text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
-        
+        if shape.has_text_frame:  # 텍스트 상자가 있는지 확인
+            textbox = shape
             break
+
+    if textbox:
+        # 텍스트 상자가 있는 경우 기존 내용을 지우지 않고 텍스트 추가
+        text_frame = textbox.text_frame
+
+        # 단락 추가
+        p = text_frame.add_paragraph()
+        p.text = "감사합니다"
+        p.font.size = Pt(40)
+        p.font.bold = True
+
+        # 텍스트의 가로 정렬을 중앙으로 설정
+        p.alignment = PP_ALIGN.CENTER
+
+        # 텍스트 상자의 세로 정렬을 중앙으로 설정
+        text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+    else:
+        print("본문 텍스트 상자를 찾을 수 없습니다.")
+
 
     xml_slides = prs.slides._sldIdLst  
     slides = list(xml_slides)
     for i in [9, 8]:  # 뒤에서부터 제거 (슬라이드 인덱스는 0부터 시작하므로 8, 9, 10은 7, 8, 9에 해당)
         xml_slides.remove(slides[i])
-    
+        
+    add_textbox_to_slides(prs, text=" ")
     
     output_path = '/Users/sinequanon/Documents/PerfectS/data/pptx/test_pptx.pptx'
     prs.save(output_path)

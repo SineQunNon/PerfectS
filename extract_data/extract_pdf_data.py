@@ -961,5 +961,3 @@ def main():
     print(vital_check_table)
 
     print(lab_tables)
-
-main()

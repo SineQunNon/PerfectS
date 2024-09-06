@@ -229,6 +229,11 @@ def get_pptx_tables(pdf_path):
             # print("date : ", date)
             # print(plt_row)
 
+    # 예외 처리: 추출된 테이블이 없을 경우 빈 데이터프레임 반환
+    if len(extracted_lab_tables) == 0:
+        print("No lab data found in the PDF.")
+        return pd.DataFrame()  # 빈 데이터프레임 반환
+
     result_df = pd.concat(extracted_lab_tables, ignore_index=True)
 
     return result_df

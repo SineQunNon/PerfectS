@@ -1,0 +1,43 @@
+===signalment===
+Name : 모찌
+Breed : 몰티즈
+Species : 개
+Age : 8y 6m
+Sex : CM
+BW : 5kg
+
+===chief_complaint===
+소변 흘리는 증상
+결석수술 개복 3번 이력
+요도 내 결석으로 내원
+
+===body_check===
+b.w : 5kg
+t : 38.9'c / pr 160 / r : panting / bp : 160 #3
+cardiac aus : NRF . 환자의 과도한 흥분으로 평가 제한적
+Lung aus : NRF
+RAD)thorax,abd#오 -VHS 10.5v -폐야 전반 경미한 기관지-간질 침윤 -> 노령성 변화, 기관지염 감별 추천 -방광 및 os penis mild 및 base 수준의 penile urethra 내 결석 관찰, 방광 팽만 -> 이후 retrohydroperfusion 후 요도 카테터 장착 영상에서는 요도 결석 방광 내로 이동한 것으로 고려됨 -양측 고관절 DJD 고려
+US)Echo#오 Conclusion) --> MMVD ACVIM stage B1-2, mild PH(probability low) ; 일부 view에서 LV 수축능 다소 저하되어 관찰되었으나 환자의 빠른 심박 및 빈호흡 영향 고려, 추후 측정 시 정상범위 내로 측정되었으나 모니터링 필요
+MV, TV 형태는 양호, mild MV prolapse -MR vmax 6.45m/s, PG 166.28mmHg -LVIDDN 1.93 LA/Ao 1.76
+LVIDd 30.98mm LVIDs 16.08mm FS 48.10% -E peak 0.85m/s, E/A 1.18 E'/A'>1, E/E' 8.93 -TR vmax 2.62m/s 27.44mmHg
+US)abd#오 -담낭 슬러지, 폐색 의심 소견 관찰되지 않음 -간실질 전반에서 경계 불분명한 저에코 결절 다수 산재, 간 margin blunt하게 관찰 -> nodular hyperplasia, vacuolar hepatopathy 고려, 초기 cirrhosis로의 진행 감별 추천, 간수치 확인 추천됨 -비장 head의 heterogeneous하게 저에코성 결절 약 1.7*1.7cm 크기로 관찰, 내부로 혈류 유입 관찰 -> 양/악성 감별 위한 조직검사 추천됨 -양측 신장 피질 에코 상승 및 CM definition 저하, 피질 고에코 foci 및 작은 cyst 소수, 게실의 결석 일부 관찰, 폐색 의심 소견 관찰되지 않음 -> CKD, 노령성 변화 감별 추천 -방광 내 작은 결석 다수 관찰, 방광벽은 양호하게 관찰
+
+===diagnosis===
+방광결석
+비장종괴
+
+===plan_edu===
+피부 최소절개후 경성 방광경이용 결석제거(PCCL)
+마취전검사상 비장의 저에코 결절이 확인되며 혈관화 발달되어있어 조직검사 권장, 마취 시 동시 진행하기로 함
+
+===sugery====
+방광결석 : 복벽 1cm 절개하여 PCCL 진행
+비장절제 : 방광수술 마무리 후 복벽 연장하여 절개하여 제거
+
+===a_record===
+
+
+===postcare===
+수술 후 3일차 퇴원 : 식욕 활력 양호하며 자발배뇨 원활하나 혈뇨 증상 간헐적으로 보이는 상황으로 비뇨기증상은 수술 후 1-2주 정도 보이실 수 있음 안내드림
+Ca Ox ; 칼슘계열 결석 - 인함량 낮은 음식, 칼륨 수치 높은 음식 피해주세요
+비장 조직검사 ; 진행중

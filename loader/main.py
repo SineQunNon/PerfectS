@@ -103,10 +103,11 @@ def main(pdf_filepath):
     vital_check_table = get_vital_check(pages)
     lab_tables = get_lab(pages)
 
+    #print(animal_info)
     #print(soap_result)
     #print(vital_check_table)
     #print(lab_tables)
     return soap_result, vital_check_table, lab_tables, animal_info
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main("/Users/sinequanon/Documents/PerfectS/data/pdf_data/TEST_01.pdf")

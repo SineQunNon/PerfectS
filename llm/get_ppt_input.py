@@ -4,6 +4,10 @@ from loader.main import *
 from langchain_openai import ChatOpenAI
 from prompt.prompt import get_prompt, get_parser
 from langchain_core.runnables import RunnablePassthrough
+from dotenv import load_dotenv
+import sys
+
+#print(sys.getdefaultencoding())
 
 def get_ppt_input(pdf_path):
     pages = load_pdf(pdf_path)
@@ -25,5 +29,7 @@ def get_ppt_input(pdf_path):
     chain = {'input' : RunnablePassthrough()} | prompt | llm | parser
 
     answer = chain.invoke(llm_input)
+
+    print(answer.signalment)
     
     return answer

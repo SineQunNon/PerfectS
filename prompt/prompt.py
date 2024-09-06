@@ -13,7 +13,7 @@ class MedicalSummary(BaseModel):
     body_check : str = Field(description="신체검사")
     diagnosis : str = Field(description="Definitive Diagnosis")
     plan_edu : str = Field(description="Plan & Client Education")
-    Sugery : str = Field(description="Sugery")
+    sugery : str = Field(description="Sugery")
     a_record : str = Field(description="Anesthesia record")
     postcare : str = Field(description="Postoperative care")
 
