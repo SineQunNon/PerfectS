@@ -23,44 +23,43 @@ def main_presentation(pdf_path):
 
     try:
         make_title_page(prs)
-        logging.info(f"{pdf_path} : make_title_page done")
+        logging.info(f"make_title_page done : {pdf_path}")
     except Exception as e:
         logging.error(f"Unexpected error processing in make_title_page {pdf_path} : {str(e)}")
 
     try:
         make_soap_pages(prs, pdf_path)
-        logging.info(f"{pdf_path} : make_soap_pages done")
+        logging.info(f"make_soap_pages done : {pdf_path}")
     except Exception as e:
         logging.error(f"Unexpected error processing in make_soap_pages {pdf_path} : {str(e)}")
-    
-    try:
-        make_chart_img_pages(prs, pdf_path)
-        logging.info(f"{pdf_path} : make_chart_img_pages done")
-    except Exception as e:
-        logging.error(f"Unexpected error processing in  {pdf_path} : {str(e)}")
-    
 
     try:
+        make_chart_img_pages(prs, pdf_path)
+        logging.info(f"make_chart_img_pages done : {pdf_path}")
+    except Exception as e:
+        logging.error(f"Unexpected error processing in {pdf_path} : {str(e)}")
+    
+    try:
         make_vital_check_page(prs, pdf_path)
-        logging.info(f"{pdf_path} : make_vital_check_page done")
+        logging.info(f"make_vital_check_page done : {pdf_path}")
     except Exception as e:
         logging.error(f"Unexpected error processing in make_vital_check_page {pdf_path} : {str(e)}")
-    
+
     try:
         make_lab_hct_page(prs, pdf_path)
-        logging.info(f"{pdf_path} : make_lab_hct_page done")
+        logging.info(f"make_lab_hct_page done : {pdf_path}")
     except Exception as e:
         logging.error(f"Unexpected error processing in make_lab_hct_page {pdf_path} : {str(e)}")
-    
+
     try:
         make_lab_aniongap_other_page(prs, pdf_path)
-        logging.info(f"{pdf_path} : make_lab_aniongap_other_page done")
+        logging.info(f"make_lab_aniongap_other_page done : {pdf_path}")
     except Exception as e:
         logging.error(f"Unexpected error processing in make_lab_aniongap_other_page {pdf_path} : {str(e)}")
-    
+
     try:
         make_end_page(prs)
-        logging.info(f"{pdf_path} : make_end_page done")
+        logging.info(f"make_end_page done : {pdf_path}")
     except Exception as e:
         logging.error(f"Unexpected error processing in make_end_page {pdf_path} : {str(e)}")
     

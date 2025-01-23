@@ -4,6 +4,7 @@ from pptx.util import Inches
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN,MSO_ANCHOR
 from pptx.util import Pt
+import logging
 
 def make_lab_hct_page(prs, pdf_path):
     df = get_pptx_hct_tables(pdf_path)
@@ -12,7 +13,7 @@ def make_lab_hct_page(prs, pdf_path):
         idx = len(prs.slides)
         t_slide = prs.slides[idx-1]
         num = int(t_slide.shapes[1].text) + 1
-        print(num)
+        #print(num)
 
         slide_layout = prs.slide_layouts[3]  # 빈 슬라이드
         slide = prs.slides.add_slide(slide_layout)
@@ -107,7 +108,8 @@ def make_lab_hct_page(prs, pdf_path):
                 result_cell.vertical_anchor = MSO_ANCHOR.MIDDLE  # 중간 정렬
 
     else:
-        print("lab table is empty")
+        pass
+        #logging.info("lab table is empty")
 
 def get_table_str(table_list):
     table_str = ""
@@ -118,7 +120,7 @@ def get_table_str(table_list):
 
 def make_lab_aniongap_other_page(prs, pdf_path):
     anion_table_list, other_table_list = get_pptx_AnionGap_and_other_tables(pdf_path)
-
+    
     # 가스 분석 표 생성
     if len(anion_table_list) != 0:
         

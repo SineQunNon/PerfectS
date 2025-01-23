@@ -103,7 +103,6 @@ def add_vital_check_table_to_slide(prs, num, headers, vital_check_table):
             cell.vertical_anchor = MSO_ANCHOR.MIDDLE  # 중간 정렬
 
 def make_vital_check_page(prs, pdf_path):
-
     """ vital check 그래프 삽입 """
     pages = load_pdf(pdf_path)
     vital_check_table = get_vital_check(pages)

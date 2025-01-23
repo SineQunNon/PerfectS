@@ -1,4 +1,5 @@
 import pandas as pd
+import logging
 
 def assessment_exists(pages):
     page_num = 0
@@ -78,34 +79,59 @@ def make_assessment_table(pages):
     for point, page_ in zip(y_points, page_info):
         max_point = 0
 
+        found_code = False
         for page in pages:
             metadata = page.metadata
             points = metadata['coordinates']['points']
             if points[0][0] == 92.71 and points[0][1] > (point - 4) and points[0][1] < (point + 4) and metadata['page_number'] == page_:
                 assessment['코드'].append(page.page_content)
+                found_code = True
+                break
+        if not found_code:
+            assessment['코드'].append(None)
         
+
+        # 진단명 데이터 추출
+        found_diagnosis = False
         for page in pages:
             metadata = page.metadata
             points = metadata['coordinates']['points']
             if points[0][0] == 183.42 and points[0][1] > (point - 4) and points[0][1] < (point + 4) and metadata['page_number'] == page_:
                 assessment['진단명'].append(page.page_content)
+                found_diagnosis = True
+                break
+        if not found_diagnosis:
+            assessment['진단명'].append(None)
         
+        # 과목 데이터 추출
+        found_subject = False
         for page in pages:
             metadata = page.metadata
             points = metadata['coordinates']['points']
             if points[0][0] == 387.51 and points[0][1] > (point - 4) and points[0][1] < (point + 4) and metadata['page_number'] == page_:
                 max_point = max(points[2][0], 387.51)
                 assessment['과목'].append(page.page_content)
+                found_subject = True
+                break
+        if not found_subject:
+            assessment['과목'].append(None)
         
-        not_present = True
+        if max_point < 387.51:
+            max_point = 500
+        not_present = False
         for page in pages:
             metadata = page.metadata
             points = metadata['coordinates']['points']
             if points[0][0] > max_point and points[0][1] > (point - 4) and points[0][1] < (point + 4) and metadata['page_number'] == page_:
                 assessment['Sign'].append(page.page_content)
-                not_present = False
-        if not_present:
+                not_present = True
+                break
+        if not not_present:
             assessment['Sign'].append(None)
     
-    assessment_df = pd.DataFrame(assessment)
-    return assessment_df
+    try:
+        assessment_df = pd.DataFrame(assessment)
+        return assessment_df
+    except ValueError as e:
+        logging.error(f"Error processing in make_assessment_table2 : {e}")
+        return pd.DataFrame()

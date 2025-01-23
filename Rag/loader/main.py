@@ -10,6 +10,9 @@ from Rag.loader.vital_check import extract_vital_check, make_vital_check_table
 from Rag.loader.lab import extract_lab_data_all, extract_lab_table_date, extract_lab_data_via_interval_info, extract_lab_data, make_lab_table
 import pandas as pd
 import numpy as np
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # 로그 설정
 
@@ -117,24 +120,32 @@ def get_pptx_hct_tables(pdf_path):
         wbc_row = table[table['검사명'] == 'WBC']
         plt_row = table[table['검사명'] == 'PLT']
 
-        if not hct_row.empty:
+        if not hct_row.empty and not wbc_row.empty and not plt_row.empty:
             hct_row = hct_row.copy()
             hct_row['date'] = date
             extracted_lab_tables.append(hct_row)
-            # print("date : ", date)
-            # print("hct : ",hct_row)
-        if not wbc_row.empty:
+
             wbc_row = wbc_row.copy()
             wbc_row['date'] = date
             extracted_lab_tables.append(wbc_row)
-            # print("date : ", date)
-            # print(wbc_row)
-        if not plt_row.empty:
+
             plt_row = plt_row.copy()
             plt_row['date'] = date
             extracted_lab_tables.append(plt_row)
             # print("date : ", date)
-            # print(plt_row)
+            # print("hct : ",hct_row)
+        # if not wbc_row.empty:
+        #     wbc_row = wbc_row.copy()
+        #     wbc_row['date'] = date
+        #     extracted_lab_tables.append(wbc_row)
+        #     # print("date : ", date)
+        #     # print(wbc_row)
+        # if not plt_row.empty:
+        #     plt_row = plt_row.copy()
+        #     plt_row['date'] = date
+        #     extracted_lab_tables.append(plt_row)
+        #     # print("date : ", date)
+        #     # print(plt_row)
 
     # 예외 처리: 추출된 테이블이 없을 경우 빈 데이터프레임 반환
     if len(extracted_lab_tables) == 0:
@@ -143,6 +154,30 @@ def get_pptx_hct_tables(pdf_path):
     result_df = pd.concat(extracted_lab_tables, ignore_index=True)
 
     return result_df
+
+def insert_temperature_row(df, position=22):
+    # 새로운 행 생성
+    new_row = pd.Series({
+        '검사명': 'temperature',
+        '결과값': 0,
+        '단위위': 'None',
+        'status': 'None',
+        'MIN': 'None',
+        'MAX': 'None',
+        'Description': 'None'
+    })
+    
+    # 데이터프레임을 position 기준으로 분할
+    df_before = df.iloc[:position]
+    df_after = df.iloc[position:]
+    
+    # 새로운 행을 중간에 삽입
+    df_new = pd.concat([df_before, pd.DataFrame([new_row]), df_after])
+    
+    # 인덱스 재설정
+    df_new = df_new.reset_index(drop=True)
+    
+    return df_new
 
 def get_pptx_AnionGap_and_other_tables(pdf_path):
     pages = load_pdf(pdf_path)
@@ -156,9 +191,13 @@ def get_pptx_AnionGap_and_other_tables(pdf_path):
         table = data['table']
         #print(table)
         anion_row = table[(table['검사명'])=='Anion Gap']
-        hct_row = table[(table['검사명'])=='HCT'] 
+        hct_row = table[(table['검사명'])=='HCT']
+        temp_row = table[(table['검사명'])=='temperature']
         
         if not anion_row.empty:
+            if temp_row.empty:
+                new_table = insert_temperature_row(table, position=22)
+                data['table'] = new_table
             extracted_lab_aniongap_tables.append(data)
         elif hct_row.empty:
             extracted_lab_other_tables.append(data)
@@ -171,20 +210,18 @@ def get_pptx_AnionGap_and_other_tables(pdf_path):
 
 """  Test  """ 
 def main(pdf_filepath):
-    pdf_filepath = '/home/pjw/IBDP_test.pdf'
     pages = load_pdf(pdf_filepath)
 
-    animal_info = get_animal_data(pages)
-    soap_result = get_soap(pages)
-    vital_check_table = get_vital_check(pages)
+    #animal_info = get_animal_data(pages)
+    #soap_result = get_soap(pages)
+    #vital_check_table = get_vital_check(pages)
     lab_tables = get_lab(pages)
 
     #print(animal_info)
     #print(soap_result)
     #print(vital_check_table)
-    #print(lab_tables)
-    return soap_result, vital_check_table, lab_tables, animal_info
-
+    print(lab_tables)
+    #return soap_result, vital_check_table, lab_tables, animal_info
 
 # if __name__=="__main__":
 #     get_pptx_AnionGap_and_other_tables("/home/pjw/IBDP_test.pdf")

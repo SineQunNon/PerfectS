@@ -17,7 +17,7 @@ def get_ppt_input(pdf_path):
 
     #------------------------get LLM input--------------------------#
     
-    llm = ChatOpenAI(model_name='gpt-4o', temperature=0)
+    llm = ChatOpenAI(model_name='gpt-4-turbo', temperature=0)
 
     prompt = get_prompt()
     parser = get_parser()
@@ -32,7 +32,7 @@ def get_ppt_input(pdf_path):
 
 
 def get_lab_table_summary_input(table_str):
-    llm = ChatOpenAI(model_name='gpt-4o', temperature=0.5)
+    llm = ChatOpenAI(model_name='gpt-4-turbo', temperature=0)
 
     prompt = get_table_propmt()
 

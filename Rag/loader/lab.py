@@ -2,6 +2,7 @@ import re
 import numpy as np
 import pandas as pd
 from Rag.loader.pdf_loader import load_pdf
+import logging
 
 def extract_lab_data_all(pages):
     extracted_pages = []
@@ -187,5 +188,9 @@ def make_lab_table(pages):
         if not_present:
             lab['Description'].append(None)
 
-    lab_df = pd.DataFrame(lab)
-    return lab_df
+    try:
+        lab_df = pd.DataFrame(lab)
+        return lab_df
+    except ValueError as e:
+        logging.error(f"Error processing in make_lab_table : {e}")
+        return pd.DataFrame()

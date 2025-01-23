@@ -1,9 +1,12 @@
 import pandas as pd
+import logging
 
 def extract_vital_check(pages):
     extracted_pages = []
     vital_page_num = 0
     vital_y_point = 0
+    vaccination_page_num = 0
+    vaccination_y_point = 0
     lab_page_num = 0
     lab_y_point = 0
 
@@ -16,9 +19,18 @@ def extract_vital_check(pages):
         if page.page_content.lower() == '날짜' and x_point == 30.35:
             vital_y_point = coordinates['points'][0][1]
             vital_page_num = metadata['page_number']
+        
+        if page.page_content.lower() == 'vaccination' and x_point == 33.35 and y_height > 20:
+            vaccination_y_point = coordinates['points'][0][1]
+            vaccination_page_num = metadata['page_number']
+
         if page.page_content.lower() == 'lab' and x_point == 33.35 and y_height > 20:
             lab_y_point = coordinates['points'][0][1]
             lab_page_num = metadata['page_number']
+    
+    if vaccination_page_num != 0 and vaccination_y_point != 0:
+        lab_page_num = vaccination_page_num
+        lab_y_point = vaccination_y_point
 
     if vital_page_num and vital_y_point and lab_page_num and lab_y_point:
         for page in pages:
@@ -63,5 +75,9 @@ def make_vital_check_table(pages):
         vital_check['HR(/min)'].append(data_list[i+5])
         vital_check['Sign'].append(data_list[i+6])
     
-    vital_check_df = pd.DataFrame(vital_check)
-    return vital_check_df
+    try:
+        vital_check_df = pd.DataFrame(vital_check)
+        return vital_check_df
+    except ValueError as e:
+        logging.error(f"Error processing in make_vital_check_table : {e}")
+        return pd.DataFrame()

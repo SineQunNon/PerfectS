@@ -43,8 +43,6 @@ def make_plan_table(pages):
 
     y_points = []
     page_info = []
-
-    
     for page in pages:
         if page.metadata['coordinates']['points'][0][0] == 30.35:
             y_points.append(page.metadata['coordinates']['points'][0][1])

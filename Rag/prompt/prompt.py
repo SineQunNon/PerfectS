@@ -48,6 +48,7 @@ def get_prompt():
         examples=examples,
         example_prompt=example_prompt,
         suffix="""
+        한국어로 답변해주고, 전문 용어는 영어 단어를 사용해도 돼.
         진료소견 내용을 잘 파악해서 다음 헤더에 맞춰서 잘 요약해줘. 만약 헤당하는 내용의 헤더가 없으면 답변하지 않아도 돼
         #헤더
     - Signalment

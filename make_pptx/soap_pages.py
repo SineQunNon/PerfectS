@@ -1,30 +1,35 @@
 from pptx.util import Inches, Cm, Pt
 from pptx import Presentation
+import logging
 
 from Rag.llm.get_ppt_input import get_ppt_input
 
 def get_signalment_page_data(signalment_str):
-    parts = [item.strip() for line in signalment_str.split('\n') for item in line.split(',')]
+    try:
+        parts = [item.strip() for line in signalment_str.split('\n') for item in line.split(',')]
 
-    keywords = ['Name', 'Breed', 'Species', 'Age', 'Sex', 'BW']
-    data = {}
+        keywords = ['Name', 'Breed', 'Species', 'Age', 'Sex', 'BW']
+        data = {}
 
-    for part in parts:
-        for keyword in keywords:
-            if part.startswith(keyword):
-                data[keyword] = part.split(': ')[1].strip()
+        for part in parts:
+            for keyword in keywords:
+                if part.startswith(keyword):
+                    data[keyword] = part.split(': ')[1].strip()
 
-    # 텍스트 생성
-    signalment_text = (
-        f"• Name : {data.get('Name', 'N/A')}\n"
-        f"• Breed : {data.get('Breed', 'N/A')}\n"
-        f"• Species : {data.get('Species', 'N/A')}\n"
-        f"• Age : {data.get('Age', 'N/A')}\n"
-        f"• Sex : {data.get('Sex', 'N/A')}\n"
-        f"• BW : {data.get('BW', 'N/A')}\n"
-    )
+        # 텍스트 생성
+        signalment_text = (
+            f"• Name : {data.get('Name', 'N/A')}\n"
+            f"• Breed : {data.get('Breed', 'N/A')}\n"
+            f"• Species : {data.get('Species', 'N/A')}\n"
+            f"• Age : {data.get('Age', 'N/A')}\n"
+            f"• Sex : {data.get('Sex', 'N/A')}\n"
+            f"• BW : {data.get('BW', 'N/A')}\n"
+        )
     
-    return signalment_text
+        return signalment_text
+    except Exception as e:
+        logging.error(f"Error processing signalment in get_signalment_page_data : {e}")
+        return "N/A"
 
 def get_soap_text(body_text):
     body_texts = [item.strip() for line in body_text.split('\n') for item in line.split(',')]
@@ -41,7 +46,8 @@ def add_soap_pages(prs, slide_index, title_text, body_text, num, append=True):
     """
     슬라이드의 제목과 본문(텍스트 상자)에 텍스트를 추가하는 함수.
     제목에는 'signalment' 텍스트를 추가하고, 본문에는 signalment_text를 추가합니다.
-    append가 True인 경우 본문 텍스트를 기존 텍스트 뒤에 추가하고, False인 경우 기존 텍스트를 덮어씁니다.    """
+    append가 True인 경우 본문 텍스트를 기존 텍스트 뒤에 추가하고, False인 경우 기존 텍스트를 덮어씁니다.
+    """
     # 슬라이드를 가져옵니다.
     prs.slides.add_slide(prs.slide_layouts[1])
     slide = prs.slides[slide_index]
@@ -70,6 +76,7 @@ def make_soap_pages(prs, pdf_path):
 
     add_soap_pages(prs, slide_index=1, title_text="Signalment", body_text=signalment_text, num=1,append=True, )
 
+
     attributes = ['chief_complaint', 'body_check', 'diagnosis', 'plan_edu', 'surgery', 'a_record', 'postcare']
     slide_index = 2
     t_num = 2
@@ -93,7 +100,7 @@ def make_soap_pages(prs, pdf_path):
                 title = 'N/A'
             
             body = getattr(answer, attr)
-
+            
             body = get_soap_text(body)
 
             if len(body.split('\n')) < 7:
