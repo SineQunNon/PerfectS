@@ -8,14 +8,14 @@
 ### Virtual Environment Setup
 1. Create a virtual environment
 ```bash
-python -m venv venv
+python -m venv env
 ```
 
 2. Activate the virtual environment
 
 On macOS and Linux:
 ```bash
-source venv/bin/activate
+source env/bin/activate
 ```
 
 ### Install Dependencies
